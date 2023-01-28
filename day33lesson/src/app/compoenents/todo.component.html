@@ -1,0 +1,71 @@
+<form [formGroup]="todoForm" (ngSubmit)="processForm()">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td>
+                <input type="text" placeholder="Name" size="30" formControlName="name">
+                <div *ngIf="todoForm.get('name')?.invalid && todoForm.get('name')?.dirty">
+                    <!-- ? in this context is for you to evaluate if this condition is invalid, treat it as false i.e. don't execute it -->
+                    <!-- alternatively, can add ? in the models.ts -->
+                    Please enter your name
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>
+                <input type="email" placeholder="Email" size="30" formControlName="email">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <td>
+                    <button type="button" (click)="clearForm()">Clear</button>
+                    <!-- <button type="submit" [disabled]="invalid()">Save</button> -->
+                    <button type="button" (click)="addTask()">Add Todo</button>
+                    <ng-content></ng-content>
+                </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <div>invalid: {{todoForm.invalid}}, valid: {{todoForm.valid}} </div>
+                <div>pristine: {{todoForm.pristine}}, dirty: {{todoForm.dirty}}</div>
+                <!-- pristine: form is totally clean (form has not been touched before) -->
+            </td>
+        </tr>
+    </table>
+    <table *ngIf="taskArray.controls.length>0">
+        <thead>
+            <tr>
+                <th>Task</th>
+                <th>Priority</th>
+            </tr>
+        </thead>
+        <tbody formArrayName="tasks">
+            <!-- this is a subform of the formgroup - processform -->
+            <!-- t is a formGroup. 
+            Another way of writing the below statement is: -->
+            <!-- <tr *ngFor="let t of taskArray.controls; let i = index" [formGroup]="t">  -->
+            <tr *ngFor="let t of taskArray.controls; let i = index" [formGroupName]="i"> 
+                <!-- [formGroupName] is enclosed with [] to show that it is a variable and thus is assigned with a name
+                formArrayName does not have [] so the name is literal -->
+                <!-- the name of every element in the array is an index -->
+                <!-- another way to assign variable is formArrayName="'tasks'" (Add in single quote) -->
+                <td>
+                    <input type="text" size="30" placeholder="Task" formControlName="task">
+                </td>
+                <td>
+                    <select formControlName="priority">
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </td>
+                <td>
+                    <button type="button" (click)="removeTask(i)">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>

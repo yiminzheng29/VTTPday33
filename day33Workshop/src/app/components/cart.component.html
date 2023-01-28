@@ -1,0 +1,76 @@
+<h1>Cart</h1>
+<form [formGroup]="cartForm" (ngSubmit)="processForm()">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td>
+                <input type="text" placeholder="Name" formControlName="name">
+            </td>
+        </tr>
+        <tr>
+            <td>Address:</td>
+            <td>
+                <input type="text" placeholder="Address" formControlName="address">
+            </td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>
+                <input type="email" placeholder="Email" formControlName="email">
+            </td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td>
+                <input type="number" placeholder="Phone" formControlName="phone">
+            </td>
+        </tr>
+        <tr>
+            <td>Express:</td>
+            <td>
+                <input type="checkbox" formControlName="express">
+            </td>
+        </tr>
+        <tr>
+            <td>Delivery:</td>
+            <td>
+                <fieldset>
+                    <input type="radio" formControlName="delivery" id="morning" value="morning" /><label for="track">0900 - 1100</label>
+                    <input type="radio" formControlName="delivery" id="afternoon" value="afternoon"  /><label for="event">1100 - 1500</label>
+                    <input type="radio" formControlName="delivery" id="night" value="night" /><label for="message">1500 - 1900</label>
+                </fieldset>
+            </td>
+        </tr>
+        <tr>
+            <td><button type="submit">Checkout</button></td>
+            <td><button type="button" (click)="addItem()">Add</button></td>
+            <td><button type="button" (click)="clearForm()">Clear Form</button></td>
+        </tr>
+    </table>
+
+    <table *ngIf="items.controls.length > 0">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+            </tr>
+        </thead>
+        <tbody formArrayName="items">
+            <tr *ngFor="let t of items.controls; let i = index" [formGroupName]="i">
+                <td>
+                    <input type="text" size="30" placeholder="Item" formControlName="itemname">
+                </td>
+                <td>
+                    <input type="number" size="30" placeholder="Quantity" formControlName="quantity">
+                </td>
+                <td>
+                    <input type="number" size="30" placeholder="Price" formControlName="unitprice">
+                </td>
+                <td>
+                   <button type="button" (click)="removeItem(i)">X</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
